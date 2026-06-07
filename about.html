@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — CricScore</title>
+  <meta name="description" content="Learn about CricScore — the AI-assisted cricket scoring platform built for serious cricket communities.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f1117;
+      --bg-card:   #1a1d27;
+      --bg-elev:   #22263a;
+      --accent:    #4fa3e0;
+      --accent2:   #2d7abf;
+      --text:      #e8eaf0;
+      --text2:     #8a8fa8;
+      --border:    #2a2e42;
+      --green:     #4caf82;
+      --ball:      #e8943a;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15,17,23,0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; text-decoration: none; color: var(--text); }
+    .nav-brand span.emoji { font-size: 22px; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: var(--text2); text-decoration: none; font-size: 14px; transition: color 0.15s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 20px;
+      padding: 8px 20px; font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent2); }
+
+    /* PAGE HEADER */
+    .page-header {
+      padding: 120px 24px 60px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 60%, rgba(79,163,224,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .page-header .label {
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .page-header h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800; letter-spacing: -1px; margin-bottom: 16px;
+    }
+    .page-header p {
+      color: var(--text2); font-size: 18px; max-width: 540px; margin: 0 auto;
+    }
+
+    /* CONTAINER */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 60px 24px 100px;
+    }
+
+    /* INFO CARDS */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: var(--accent); }
+    .card h2 {
+      font-size: 16px; font-weight: 700;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .card h2 .icon {
+      font-size: 20px;
+      width: 36px; height: 36px;
+      background: var(--bg-elev);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card p { color: var(--text2); font-size: 15px; line-height: 1.75; }
+    .card p + p { margin-top: 10px; }
+    .card strong { color: var(--text); }
+
+    /* FEATURE GRID */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+      margin-bottom: 16px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .feature-icon { font-size: 28px; margin-bottom: 12px; }
+    .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .feature-desc { color: var(--text2); font-size: 13px; line-height: 1.6; }
+
+    /* SECTION HEADING */
+    .section-heading {
+      font-size: 13px; font-weight: 600; color: var(--accent);
+      letter-spacing: 1px; text-transform: uppercase;
+      margin: 48px 0 6px;
+    }
+    .section-title {
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800; letter-spacing: -0.5px;
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      color: var(--text2); font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    /* APP INFO STRIP */
+    .info-strip {
+      display: flex; flex-wrap: wrap;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    .info-item {
+      flex: 1; min-width: 160px;
+      padding: 22px 24px;
+      border-right: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+    .info-item:last-child { border-right: none; }
+    .info-label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+    .info-value { font-size: 18px; font-weight: 700; color: var(--accent); }
+
+    /* CTA */
+    .cta-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 32px;
+      text-align: center;
+      margin-top: 16px;
+    }
+    .cta-card h2 { font-size: 24px; font-weight: 800; margin-bottom: 10px; }
+    .cta-card p { color: var(--text2); margin-bottom: 24px; }
+    .store-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--text); color: #000;
+      border-radius: 14px; padding: 12px 20px;
+      text-decoration: none; font-weight: 600;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .store-btn:hover { transform: translateY(-2px); }
+    .store-btn-text { display: flex; flex-direction: column; line-height: 1.2; text-align: left; }
+    .store-btn-text small { font-size: 11px; font-weight: 400; opacity: 0.7; }
+    .store-btn-text strong { font-size: 15px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text2);
+      font-size: 13px;
+    }
+    footer a { color: var(--text2); text-decoration: none; margin: 0 8px; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .card { padding: 22px 20px; }
+      .info-item { min-width: 50%; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <span class="emoji">🏏</span>
+    <span>CricScore</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html" class="active">About</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+  <a class="nav-cta" href="https://apps.apple.com/us/app/randomcricscore/id6767393901" target="_blank">Download Free</a>
+</nav>
+
+<div class="page-header">
+  <div class="label">About</div>
+  <h1>Built for cricket communities</h1>
+  <p>CricScore is a mobile-first cricket scoring platform designed for teams, tournaments, and scorers who care about getting it right.</p>
+</div>
+
+<div class="container">
+
+  <!-- App info strip -->
+  <div class="info-strip">
+    <div class="info-item">
+      <div class="info-label">Platform</div>
+      <div class="info-value">iOS</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Price</div>
+      <div class="info-value">Free</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Formats</div>
+      <div class="info-value">T10 – Test</div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">Version</div>
+      <div class="info-value">1.0.4</div>
+    </div>
+  </div>
+
+  <!-- What is CricScore -->
+  <div class="card">
+    <h2><span class="icon">🏏</span> What is CricScore?</h2>
+    <p>CricScore is an AI-assisted cricket scoring platform that makes it easy to run matches, manage tournaments, and share live scorecards — all from your phone.</p>
+    <p>Whether you're organising a local T10 gully tournament or a full multi-team season, CricScore handles ball-by-ball scoring, team rosters, fixtures, standings, and detailed player stats automatically.</p>
+  </div>
+
+  <!-- Who it's for -->
+  <div class="card">
+    <h2><span class="icon">👥</span> Who is it for?</h2>
+    <p><strong>Scorers</strong> — tap through each delivery quickly. Wickets, extras, boundaries, and wides all tracked with one or two taps.</p>
+    <p><strong>Tournament organisers</strong> — create tournaments, add fixtures, invite co-scorers by email, and publish standings in real time.</p>
+    <p><strong>Players &amp; fans</strong> — follow live scorecards, review match summaries, and browse full player statistics.</p>
+  </div>
+
+  <!-- Features -->
+  <div class="section-heading">Features</div>
+  <div class="section-title">Everything in one app</div>
+  <div class="section-sub">No spreadsheets. No WhatsApp scorecards. Just CricScore.</div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Live Scoring</div>
+      <div class="feature-desc">Ball-by-ball scoring with auto over tracking, extras, wickets, and partnerships. Shareable live scorecard link.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">Tournament Management</div>
+      <div class="feature-desc">Create tournaments with custom formats, manage fixtures, group stages, and real-time standings.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <div class="feature-title">Team Rosters</div>
+      <div class="feature-desc">Build squads with batting/bowling styles and jersey numbers. Bulk import players via CSV.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✉️</div>
+      <div class="feature-title">Invite Scorers</div>
+      <div class="feature-desc">Invite anyone by email to co-score a match. They get instant access as soon as they sign up.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎬</div>
+      <div class="feature-title">Video Highlights</div>
+      <div class="feature-desc">Automatic video clips for wickets, fours, and sixes. Review highlights inline with commentary.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Country Filtering</div>
+      <div class="feature-desc">See tournaments relevant to your region. Admins and invited scorers always see their assigned tournaments.</div>
+    </div>
+  </div>
+
+  <!-- Contact -->
+  <div class="card">
+    <h2><span class="icon">📬</span> Contact &amp; Support</h2>
+    <p>Questions, feedback, or feature requests? We'd love to hear from you.</p>
+    <p style="margin-top: 12px;"><a href="mailto:bellarykirankumar@gmail.com" style="color: var(--accent); text-decoration: none; font-weight: 500;">bellarykirankumar@gmail.com</a></p>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-card">
+    <h2>Ready to score your next match?</h2>
+    <p>Free to download. No subscription. No ads.</p>
+    <a class="store-btn" href="https://apps.apple.com/us/app/randomcricscore/id6767393901" target="_blank">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+      </svg>
+      <div class="store-btn-text">
+        <small>Download on the</small>
+        <strong>App Store</strong>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2026 CricScore &nbsp;·&nbsp;
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="mailto:bellarykirankumar@gmail.com">Contact</a>
+  </p>
+</footer>
+
+</body>
+</html>

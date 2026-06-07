@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1080">
+  <title>CricScore — Instagram Cards</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #0f1117;
+      --card:    #1a1d27;
+      --elev:    #22263a;
+      --accent:  #4fa3e0;
+      --green:   #4caf82;
+      --ball:    #e8943a;
+      --purple:  #9c6fe4;
+      --text:    #e8eaf0;
+      --text2:   #8a8fa8;
+      --border:  #2a2e42;
+    }
+
+    body {
+      background: #111;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 40px 0;
+    }
+
+    /* Instructions banner */
+    .instructions {
+      background: #1e3a5f;
+      color: #90caf9;
+      font-size: 14px;
+      padding: 16px 32px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      max-width: 1080px;
+      line-height: 1.7;
+      text-align: center;
+    }
+    .instructions strong { color: #fff; }
+
+    /* Each card is exactly 1080x1080 */
+    .card {
+      width: 1080px;
+      height: 1080px;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin-bottom: 40px;
+    }
+
+    /* ─── CARD 1: Hero ─────────────────────────────── */
+    .card-hero {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .card-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(79,163,224,0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(76,175,130,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-emoji { font-size: 96px; margin-bottom: 32px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(79,163,224,0.12);
+      border: 1px solid rgba(79,163,224,0.3);
+      border-radius: 40px; padding: 10px 24px;
+      font-size: 18px; color: var(--accent);
+      font-weight: 600; letter-spacing: 0.5px;
+      margin-bottom: 40px;
+    }
+    .hero-tag .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+    .hero-h1 { font-size: 88px; font-weight: 900; letter-spacing: -3px; line-height: 1; color: var(--text); margin-bottom: 16px; }
+    .hero-h1 span { color: var(--accent); }
+    .hero-sub { font-size: 30px; color: var(--text2); max-width: 720px; line-height: 1.5; margin-bottom: 56px; }
+    .hero-pills { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+    .pill {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 40px; padding: 12px 28px;
+      font-size: 20px; color: var(--text2); font-weight: 500;
+    }
+    .watermark { position: absolute; bottom: 36px; font-size: 22px; color: var(--text2); opacity: 0.5; letter-spacing: 0.5px; }
+
+    /* ─── CARD 2: Features grid ─────────────────────── */
+    .card-features {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 72px 80px;
+    }
+    .card-label { font-size: 20px; font-weight: 700; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+    .card-title { font-size: 56px; font-weight: 900; letter-spacing: -2px; color: var(--text); margin-bottom: 8px; }
+    .card-sub { font-size: 24px; color: var(--text2); margin-bottom: 56px; }
+
+    .feat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+    .feat {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .feat-icon { font-size: 44px; }
+    .feat-name { font-size: 26px; font-weight: 800; color: var(--text); }
+    .feat-desc { font-size: 20px; color: var(--text2); line-height: 1.5; }
+
+    /* ─── CARD 3: Scoring UI mockup ─────────────────── */
+    .card-scoring {
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 72px;
+      padding: 72px;
+    }
+    .card-scoring::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(232,148,58,0.1) 0%, transparent 70%);
+    }
+    .scoring-text { flex: 1; z-index: 1; }
+    .scoring-text .card-label { color: var(--ball); }
+    .scoring-text .card-title { font-size: 52px; margin-bottom: 24px; }
+    .scoring-text .card-sub { margin-bottom: 40px; }
+    .score-points { display: flex; flex-direction: column; gap: 16px; }
+    .score-point { display: flex; align-items: center; gap: 16px; font-size: 22px; color: var(--text2); }
+    .score-point .check { color: var(--green); font-size: 24px; }
+
+    /* Phone mockup */
+    .phone {
+      width: 280px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 44px;
+      padding: 20px 16px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+      flex-shrink: 0;
+      z-index: 1;
+    }
+    .phone-screen { background: var(--bg); border-radius: 32px; padding: 20px; }
+    .phone-live { display: inline-flex; align-items: center; gap: 6px; background: rgba(76,175,130,0.15); border: 1px solid rgba(76,175,130,0.3); border-radius: 20px; padding: 5px 14px; font-size: 13px; color: var(--green); font-weight: 700; margin-bottom: 12px; }
+    .phone-teams { font-size: 12px; color: var(--text2); text-align: center; }
+    .phone-score { font-size: 48px; font-weight: 900; color: var(--accent); text-align: center; line-height: 1; }
+    .phone-overs { font-size: 12px; color: var(--text2); text-align: center; margin-bottom: 14px; }
+    .phone-hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
+    .phone-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); padding: 3px 0; }
+    .phone-row strong { color: var(--text); }
+    .phone-need { font-size: 12px; color: var(--ball); font-weight: 600; text-align: center; margin-top: 8px; }
+    .phone-btns { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-top: 14px; }
+    .phone-btn { background: var(--elev); border-radius: 8px; padding: 8px 4px; text-align: center; font-size: 13px; font-weight: 700; color: var(--text); }
+    .phone-btn.w { color: var(--ball); }
+    .phone-btn.b { color: var(--accent); }
+
+    /* ─── CARD 4: Tournament + Video ────────────────── */
+    .card-tournament {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 72px 80px;
+    }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; flex: 1; }
+    .highlight-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+    }
+    .highlight-box .hb-icon { font-size: 52px; margin-bottom: 20px; }
+    .highlight-box .hb-title { font-size: 30px; font-weight: 800; color: var(--text); margin-bottom: 14px; }
+    .highlight-box .hb-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .highlight-box .hb-list li { display: flex; align-items: flex-start; gap: 12px; font-size: 19px; color: var(--text2); line-height: 1.4; }
+    .highlight-box .hb-list li::before { content: '→'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+    .highlight-box.green-border { border-color: rgba(76,175,130,0.35); }
+    .highlight-box.blue-border { border-color: rgba(79,163,224,0.35); }
+
+    /* ─── CARD 5: Download CTA ──────────────────────── */
+    .card-cta {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px;
+    }
+    .card-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 50% 50%, rgba(79,163,224,0.14) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 20% 80%, rgba(76,175,130,0.08) 0%, transparent 60%);
+    }
+    .cta-emoji { font-size: 80px; margin-bottom: 24px; z-index: 1; }
+    .cta-title { font-size: 72px; font-weight: 900; letter-spacing: -3px; color: var(--text); line-height: 1; margin-bottom: 20px; z-index: 1; }
+    .cta-title span { color: var(--accent); }
+    .cta-sub { font-size: 26px; color: var(--text2); margin-bottom: 56px; max-width: 700px; line-height: 1.5; z-index: 1; }
+    .cta-badge {
+      display: flex; align-items: center; gap: 20px;
+      background: var(--text); color: #000;
+      border-radius: 22px; padding: 20px 36px;
+      font-size: 26px; font-weight: 800;
+      margin-bottom: 40px; z-index: 1;
+      box-shadow: 0 20px 60px rgba(79,163,224,0.25);
+    }
+    .cta-badge .apple-icon { font-size: 36px; }
+    .cta-url { font-size: 22px; color: var(--text2); z-index: 1; }
+    .cta-url strong { color: var(--accent); }
+    .cta-free {
+      display: flex; gap: 32px; margin-top: 40px; z-index: 1;
+    }
+    .cta-free-item { font-size: 20px; color: var(--text2); display: flex; align-items: center; gap: 8px; }
+    .cta-free-item span { color: var(--green); font-size: 22px; }
+  </style>
+</head>
+<body>
+
+<div class="instructions">
+  <strong>How to screenshot each card:</strong><br>
+  Open this page in Chrome → F12 (DevTools) → Toggle Device Toolbar (📱 icon) →
+  Set custom size <strong>1080 × 1080</strong> → scroll to each card → right-click → <strong>Capture screenshot</strong><br>
+  Or: zoom your browser to fit one card on screen, then use your OS screenshot tool (⌘⇧4 on Mac).
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CARD 1 — Hero
+════════════════════════════════════════════════════ -->
+<div class="card card-hero">
+  <div class="hero-emoji">🏏</div>
+  <div class="hero-tag"><span class="dot"></span> Live on the App Store</div>
+  <h1 class="hero-h1">Cric<span>Score</span></h1>
+  <p class="hero-sub">Cricket scoring, tournament management & video highlights — all in one app.</p>
+  <div class="hero-pills">
+    <div class="pill">📊 Live Scoring</div>
+    <div class="pill">🏆 Tournaments</div>
+    <div class="pill">🎬 Video Clips</div>
+    <div class="pill">🆓 Free</div>
+  </div>
+  <div class="watermark">cricscore.randomappsstore.com</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CARD 2 — Features
+════════════════════════════════════════════════════ -->
+<div class="card card-features">
+  <div class="card-label">Features</div>
+  <div class="card-title">Everything your team needs</div>
+  <div class="card-sub">From a gully match to a full tournament — CricScore handles it all.</div>
+  <div class="feat-grid">
+    <div class="feat">
+      <div class="feat-icon">📊</div>
+      <div class="feat-name">Live Scoring</div>
+      <div class="feat-desc">Ball-by-ball with auto over tracking, wickets, extras & partnerships</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🏆</div>
+      <div class="feat-name">Tournaments</div>
+      <div class="feat-desc">Custom formats, fixtures, group stages & real-time standings</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🎬</div>
+      <div class="feat-name">Video Highlights</div>
+      <div class="feat-desc">Auto clips for wickets, fours & sixes. Watch inline with commentary</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">👥</div>
+      <div class="feat-name">Team Rosters</div>
+      <div class="feat-desc">Build squads, assign jersey numbers, bulk import via CSV</div>
+    </div>
+  </div>
+  <div class="watermark" style="position:static; margin-top:32px; font-size:18px;">cricscore.randomappsstore.com</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CARD 3 — Scoring UI
+════════════════════════════════════════════════════ -->
+<div class="card card-scoring">
+  <div class="scoring-text">
+    <div class="card-label">Live Scoring</div>
+    <div class="card-title" style="font-size:52px; font-weight:900; letter-spacing:-2px; color:var(--text); margin-bottom:16px; line-height:1.1;">Score any match,<br>any format</div>
+    <div class="card-sub" style="font-size:22px; color:var(--text2); margin-bottom:36px; line-height:1.5;">T10 to Test. Tap through each ball in seconds.</div>
+    <div class="score-points">
+      <div class="score-point"><span class="check">✓</span> Runs, wides, no-balls, byes</div>
+      <div class="score-point"><span class="check">✓</span> Wickets with dismissal type</div>
+      <div class="score-point"><span class="check">✓</span> Partnerships & run rates</div>
+      <div class="score-point"><span class="check">✓</span> Undo last ball</div>
+      <div class="score-point"><span class="check">✓</span> Invite co-scorer by email</div>
+    </div>
+  </div>
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="phone-live"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;"></span> LIVE</div>
+      <div class="phone-teams">Venky XI vs Kiran Boys</div>
+      <div class="phone-score">147<span style="font-size:24px;color:var(--text2)">/4</span></div>
+      <div class="phone-overs">18.3 overs • RR 7.9</div>
+      <hr class="phone-hr">
+      <div class="phone-row"><strong>Rohit K</strong><span>62* (48)</span></div>
+      <div class="phone-row"><strong>Suresh M</strong><span>31 (22)</span></div>
+      <hr class="phone-hr">
+      <div class="phone-row"><strong>Prasad B</strong><span>2-0-18-1</span></div>
+      <div class="phone-need">🏏 Need 54 off 9 balls</div>
+      <div class="phone-btns">
+        <div class="phone-btn">0</div>
+        <div class="phone-btn">1</div>
+        <div class="phone-btn">2</div>
+        <div class="phone-btn">4</div>
+        <div class="phone-btn b">6</div>
+        <div class="phone-btn w">Wd</div>
+        <div class="phone-btn w">Nb</div>
+        <div class="phone-btn w">🎯</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CARD 4 — Tournaments + Highlights
+════════════════════════════════════════════════════ -->
+<div class="card card-tournament">
+  <div class="card-label">More than scoring</div>
+  <div class="card-title" style="font-size:54px; font-weight:900; letter-spacing:-2px; color:var(--text); margin-bottom:8px;">Run tournaments.<br>Relive moments.</div>
+  <div class="card-sub" style="font-size:22px; color:var(--text2); margin-bottom:40px;">Everything from fixtures to highlight reels.</div>
+  <div class="two-col">
+    <div class="highlight-box green-border">
+      <div class="hb-icon">🏆</div>
+      <div class="hb-title">Tournament Hub</div>
+      <ul class="hb-list">
+        <li>Create multi-team tournaments</li>
+        <li>Generate fixtures automatically</li>
+        <li>Live standings & points table</li>
+        <li>Invite scorers by email</li>
+        <li>Country-based filtering</li>
+      </ul>
+    </div>
+    <div class="highlight-box blue-border">
+      <div class="hb-icon">🎬</div>
+      <div class="hb-title">Video Highlights</div>
+      <ul class="hb-list">
+        <li>Auto-clips on wickets & boundaries</li>
+        <li>30-second rolling pre-buffer</li>
+        <li>Watch inline in commentary</li>
+        <li>Highlights gallery by type</li>
+        <li>Wickets 🎯 · Fours · Sixes</li>
+      </ul>
+    </div>
+  </div>
+  <div class="watermark" style="position:static; margin-top:32px; font-size:18px; color:var(--text2); opacity:0.5;">cricscore.randomappsstore.com</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     CARD 5 — Download CTA
+════════════════════════════════════════════════════ -->
+<div class="card card-cta">
+  <div class="cta-emoji">🏏</div>
+  <div class="cta-title">Score your<br>next <span>match</span><br>today.</div>
+  <div class="cta-sub">Free to download. No subscription. No ads. Just cricket.</div>
+  <div class="cta-badge">
+    <span class="apple-icon">🍎</span>
+    Download on the App Store
+  </div>
+  <div class="cta-url">Search <strong>"CricScore"</strong> or visit<br><strong>cricscore.randomappsstore.com</strong></div>
+  <div class="cta-free">
+    <div class="cta-free-item"><span>✓</span> Free forever</div>
+    <div class="cta-free-item"><span>✓</span> iOS</div>
+    <div class="cta-free-item"><span>✓</span> All formats</div>
+  </div>
+</div>
+
+</body>
+</html>

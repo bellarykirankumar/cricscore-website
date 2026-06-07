@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CricScore – Smart Cricket Scoring</title>
+  <meta name="description" content="Score cricket matches live, manage tournaments, and track stats with CricScore. Available on iOS.">
+  <meta property="og:title" content="CricScore – Smart Cricket Scoring">
+  <meta property="og:description" content="Live scoring, tournament management, and real-time stats for cricket teams worldwide.">
+  <meta property="og:image" content="https://cricscore.randomappsstore.com/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cricscore.randomappsstore.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CricScore – Smart Cricket Scoring">
+  <meta name="twitter:description" content="Live scoring, tournament management, and real-time stats for cricket teams worldwide.">
+  <meta name="twitter:image" content="https://cricscore.randomappsstore.com/og-image.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0f1117;
+      --bg-card:   #1a1d27;
+      --bg-elev:   #22263a;
+      --accent:    #4fa3e0;
+      --accent2:   #2d7abf;
+      --text:      #e8eaf0;
+      --text2:     #8a8fa8;
+      --border:    #2a2e42;
+      --green:     #4caf82;
+      --ball:      #e8943a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15,17,23,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      height: 60px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 18px; text-decoration: none; color: var(--text); }
+    .nav-brand span.emoji { font-size: 22px; }
+    .nav-links { display: flex; gap: 24px; }
+    .nav-links a { color: var(--text2); text-decoration: none; font-size: 14px; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+    .nav-cta {
+      background: var(--accent); color: #fff;
+      border: none; border-radius: 20px;
+      padding: 8px 20px; font-size: 14px; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent2); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 100px 24px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(79,163,224,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 6px 14px;
+      font-size: 13px; color: var(--text2); margin-bottom: 28px;
+    }
+    .hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    h1 {
+      font-size: clamp(40px, 8vw, 72px);
+      font-weight: 800; line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+    }
+    h1 .accent { color: var(--accent); }
+
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text2); max-width: 560px;
+      margin: 0 auto 44px;
+    }
+
+    .store-buttons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+    .store-btn {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--text); color: #000;
+      border-radius: 14px; padding: 12px 20px;
+      text-decoration: none; font-weight: 600;
+      transition: transform 0.2s, opacity 0.2s;
+      min-width: 180px;
+    }
+    .store-btn:hover { transform: translateY(-2px); }
+    .store-btn.coming-soon { background: var(--bg-card); color: var(--text2); border: 1px solid var(--border); cursor: default; }
+    .store-btn.coming-soon:hover { transform: none; }
+    .store-btn svg { flex-shrink: 0; }
+    .store-btn-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .store-btn-text small { font-size: 11px; font-weight: 400; opacity: 0.7; }
+    .store-btn-text strong { font-size: 15px; }
+
+    /* STATS STRIP */
+    .stats {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+    .stat {
+      flex: 1; min-width: 140px;
+      padding: 28px 24px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-num { font-size: 32px; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+    /* FEATURES */
+    .section { padding: 80px 24px; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+    .section-title { font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.5px; margin-bottom: 16px; }
+    .section-sub { color: var(--text2); font-size: 17px; max-width: 540px; margin-bottom: 48px; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .feature-icon { font-size: 32px; margin-bottom: 16px; }
+    .feature-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .feature-desc { color: var(--text2); font-size: 14px; line-height: 1.6; }
+
+    /* HOW IT WORKS */
+    .how-section {
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 24px;
+    }
+    .how-inner { max-width: 1100px; margin: 0 auto; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 32px; margin-top: 48px; }
+    .step { text-align: center; }
+    .step-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--accent); color: #fff;
+      font-size: 20px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px;
+    }
+    .step-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .step-desc { color: var(--text2); font-size: 14px; }
+
+    /* CTA SECTION */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(79,163,224,0.08) 0%, transparent 70%);
+    }
+    .cta-section h2 { font-size: clamp(28px,5vw,52px); font-weight: 800; letter-spacing:-1px; margin-bottom: 16px; }
+    .cta-section p { color: var(--text2); font-size: 18px; margin-bottom: 40px; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--text2);
+      font-size: 13px;
+    }
+    footer a { color: var(--text2); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    /* CRICKET ANIMATION */
+    .hero-art {
+      margin-top: 60px;
+      position: relative;
+      display: flex; justify-content: center;
+    }
+    .mock-phone {
+      width: 220px;
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 36px;
+      padding: 16px 12px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+    }
+    .mock-screen {
+      background: var(--bg);
+      border-radius: 24px;
+      padding: 16px;
+      font-size: 11px;
+    }
+    .mock-score { text-align: center; margin-bottom: 12px; }
+    .mock-score .team { color: var(--text2); font-size: 10px; }
+    .mock-score .runs { font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .mock-score .overs { color: var(--text2); font-size: 10px; }
+    .mock-divider { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+    .mock-row { display: flex; justify-content: space-between; color: var(--text2); font-size: 10px; padding: 3px 0; }
+    .mock-row .name { color: var(--text); font-weight: 600; }
+    .mock-badge {
+      display: inline-block; background: var(--green);
+      color: #fff; font-size: 9px; border-radius: 6px;
+      padding: 2px 6px; font-weight: 700; margin-bottom: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .stat { min-width: 50%; }
+      nav { padding: 0 16px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="index.html">
+    <span class="emoji">🏏</span>
+    <span>CricScore</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy</a>
+  </div>
+  <a class="nav-cta" href="https://apps.apple.com/us/app/randomcricscore/id6767393901" target="_blank">Download Free</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Live scoring · Now on iOS
+  </div>
+
+  <h1>Cricket scoring,<br><span class="accent">reimagined.</span></h1>
+
+  <p class="hero-sub">
+    Run tournaments, score matches live, and share real-time stats — all from your phone.
+    Built for serious cricket communities.
+  </p>
+
+  <div class="store-buttons">
+    <a class="store-btn" href="https://apps.apple.com/us/app/randomcricscore/id6767393901" target="_blank">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+      </svg>
+      <div class="store-btn-text">
+        <small>Download on the</small>
+        <strong>App Store</strong>
+      </div>
+    </a>
+
+    <div class="store-btn coming-soon">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3.18 23.76c.3.17.65.19.96.07L14.08 12 3.18.17C2.87.29 2.62.57 2.62.93v22.14c0 .28.2.54.56.69zM16.62 9.54L5.32 2.87l9.46 9.46-7.48 7.48 9.32-5.41c.6-.35.96-.96.96-1.59 0-.62-.36-1.2-.96-1.27zM21.15 10.4l-2.47-1.43-2.72 2.72 2.72 2.72 2.47-1.43c.7-.41 1.14-1.12 1.14-1.81s-.44-1.39-1.14-1.77z"/>
+      </svg>
+      <div class="store-btn-text">
+        <small>Coming soon to</small>
+        <strong>Google Play</strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-art">
+    <div class="mock-phone">
+      <div class="mock-screen">
+        <div class="mock-score">
+          <div class="mock-badge">● LIVE</div>
+          <div class="team">Venky XI</div>
+          <div class="runs">147<span style="font-size:16px;color:var(--text2)">/4</span></div>
+          <div class="overs">18.3 overs</div>
+        </div>
+        <hr class="mock-divider">
+        <div class="mock-row"><span class="name">Rohit K</span><span>62* (48)</span></div>
+        <div class="mock-row"><span class="name">Suresh M</span><span>31 (22)</span></div>
+        <hr class="mock-divider">
+        <div class="mock-row"><span class="name">Prasad B</span><span>2-0-18-1</span></div>
+        <div class="mock-row" style="color:var(--ball)">🏏 Need 54 off 9 balls</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat">
+    <div class="stat-num">Live</div>
+    <div class="stat-label">Real-time scoring</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">T10–Test</div>
+    <div class="stat-label">All formats</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">Multi-team</div>
+    <div class="stat-label">Tournament support</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">Free</div>
+    <div class="stat-label">No subscription</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-label">Features</div>
+  <h2 class="section-title">Everything your team needs</h2>
+  <p class="section-sub">From a friendly gully match to a full tournament — CricScore handles it all.</p>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Live Scoring</div>
+      <div class="feature-desc">Ball-by-ball scoring with automatic over tracking, extras, wickets, and partnerships. Share a live link with anyone.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <div class="feature-title">Tournament Management</div>
+      <div class="feature-desc">Create tournaments with custom formats (T10, T20, ODI, Gully), manage fixtures, standings, and group stages.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <div class="feature-title">Team & Player Rosters</div>
+      <div class="feature-desc">Build your squad with batting style, bowling style, and jersey numbers. Import players in bulk via CSV.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✉️</div>
+      <div class="feature-title">Invite Scorers</div>
+      <div class="feature-desc">Invite someone to score a match by email. They get instant access to the tournament as soon as they sign up.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Country Filtering</div>
+      <div class="feature-desc">See tournaments relevant to your region. Admins and invited scorers always see their assigned tournaments.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Mobile First</div>
+      <div class="feature-desc">Designed for the sidelines. Score a match from your phone while watching every ball live.</div>
+    </div>
+  </div>
+</div>
+
+<div class="how-section">
+  <div class="how-inner">
+    <div class="section-label">How it works</div>
+    <h2 class="section-title">Up and running in minutes</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Create a tournament</div>
+        <div class="step-desc">Set the format, number of teams, and add your fixtures</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Add your teams</div>
+        <div class="step-desc">Build rosters or import players from a CSV file in seconds</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:var(--ball)">3</div>
+        <div class="step-title">Start scoring</div>
+        <div class="step-desc">Tap through each ball — runs, wickets, extras all tracked automatically</div>
+      </div>
+      <div class="step">
+        <div class="step-num" style="background:var(--green)">4</div>
+        <div class="step-title">Share the results</div>
+        <div class="step-desc">Scorecards, standings, and stats available instantly after the match</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <h2>Ready to score your next match?</h2>
+  <p>Free to download. No subscription. No ads.</p>
+  <div class="store-buttons">
+    <a class="store-btn" href="https://apps.apple.com/us/app/randomcricscore/id6767393901" target="_blank">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+      </svg>
+      <div class="store-btn-text">
+        <small>Download on the</small>
+        <strong>App Store</strong>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 CricScore &nbsp;·&nbsp;
+    <a href="about.html">About</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="mailto:bellarykirankumar@gmail.com">Contact</a>
+    · Built with ❤️ for cricket communities
+  </p>
+</footer>
+
+</body>
+</html>
